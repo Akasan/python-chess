@@ -94,6 +94,14 @@ def _text(content: str, x: int, y: int, width: int, height: int) -> ET.Element:
         "alignment-baseline": "middle",
     })
     t.text = content
+    return [ET.Element("rect", {
+        "x": str(x), # + width // 2),
+        "y": str(y), # + height // 2),
+        "width": str(width),
+        "height": str(height),
+        "stroke": "black",
+        "fill": "white",
+    }), t]
     return t
 
 
@@ -225,12 +233,12 @@ def board(board: Optional[chess.BaseBoard] = None, *,
     if coordinates:
         for file_index, file_name in enumerate(chess.FILE_NAMES):
             x = (file_index if not flipped else 7 - file_index) * SQUARE_SIZE + margin
-            svg.append(_text(file_name, x, 0, SQUARE_SIZE, margin))
-            svg.append(_text(file_name, x, margin + 8 * SQUARE_SIZE, SQUARE_SIZE, margin))
+            svg.extend(_text(file_name, x, 0, SQUARE_SIZE, margin))
+            svg.extend(_text(file_name, x, margin + 8 * SQUARE_SIZE, SQUARE_SIZE, margin))
         for rank_index, rank_name in enumerate(chess.RANK_NAMES):
             y = (7 - rank_index if not flipped else rank_index) * SQUARE_SIZE + margin
-            svg.append(_text(rank_name, 0, y, margin, SQUARE_SIZE))
-            svg.append(_text(rank_name, margin + 8 * SQUARE_SIZE, y, margin, SQUARE_SIZE))
+            svg.extend(_text(rank_name, 0, y, margin, SQUARE_SIZE))
+            svg.extend(_text(rank_name, margin + 8 * SQUARE_SIZE, y, margin, SQUARE_SIZE))
 
     for arrow in arrows:
         try:
